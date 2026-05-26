@@ -13,6 +13,7 @@ $con = $db->createConnection();
 
 $studentID = $_SESSION["user_id"];
 
+/* Get student profile information */
 $sql = "SELECT studentID, firstName, lastName, email, phone, username, created_at
         FROM students
         WHERE studentID = ?
@@ -26,13 +27,32 @@ $result = $stmt->get_result();
 $student = $result->fetch_assoc();
 
 $stmt->close();
-$con->close();
 
 if (!$student) {
+    $con->close();
     session_destroy();
     header("Location: login.php");
     exit;
 }
+
+/* Get enrolled courses for the logged-in student */
+$enrolledSql = "
+    SELECT 
+        c.courseCode,
+        c.courseName,
+        c.semester,
+        e.enrollmentDate,
+        e.status
+    FROM enrollments e
+    INNER JOIN courses c ON e.courseID = c.courseID
+    WHERE e.studentID = ?
+    ORDER BY e.enrollmentDate DESC
+";
+
+$enrolledStmt = $con->prepare($enrolledSql);
+$enrolledStmt->bind_param("i", $studentID);
+$enrolledStmt->execute();
+$enrolledCourses = $enrolledStmt->get_result();
 ?>
 
 <!DOCTYPE html>
@@ -84,6 +104,31 @@ if (!$student) {
             <p><strong>Account Created:</strong> <?php echo htmlspecialchars($student["created_at"]); ?></p>
         </div>
 
+        <div class="profile_info" style="margin-top: 20px;">
+            <h2>Enrolled Courses</h2>
+
+            <?php if ($enrolledCourses && $enrolledCourses->num_rows > 0): ?>
+                <?php while ($course = $enrolledCourses->fetch_assoc()): ?>
+                    <p>
+                        <strong><?php echo htmlspecialchars($course["courseCode"]); ?>:</strong>
+                        <?php echo htmlspecialchars($course["courseName"]); ?><br>
+
+                        <strong>Semester:</strong>
+                        <?php echo htmlspecialchars($course["semester"]); ?><br>
+
+                        <strong>Status:</strong>
+                        <?php echo htmlspecialchars($course["status"]); ?><br>
+
+                        <strong>Enrollment Date:</strong>
+                        <?php echo htmlspecialchars($course["enrollmentDate"]); ?>
+                    </p>
+                    <hr>
+                <?php endwhile; ?>
+            <?php else: ?>
+                <p>No enrolled courses found.</p>
+            <?php endif; ?>
+        </div>
+
         <div class="profile_actions">
             <a class="button_primary" href="enrollment.php">Go to Enrollment</a>
             <a class="button_secondary" href="logout.php">Logout</a>
@@ -94,3 +139,8 @@ if (!$student) {
 
 </body>
 </html>
+
+<?php
+$enrolledStmt->close();
+$con->close();
+?>
