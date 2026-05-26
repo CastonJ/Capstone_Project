@@ -1,639 +1,291 @@
-/* main page css */
-
-body {
-    margin: 0;
-    font-family: 'Times New Roman', serif;
-}
-
-.main_page {
-    background-image: url("../images/Company_Portal.jpg");
-    background-size: cover;
-    background-position: center;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 40px;
-}
-
-.main_page h1 {
-    color: white;
-    font-size: 3rem;
-    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
-    animation: glow 2s infinite alternate;
-    font-family: 'times new roman', serif;
-}
-
-
-/* Top NAV bar */
-
-/* Top NAV bar */
-.topnav {
-    background-color: #333;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-}
-
-.topnav a {
-    color: #f2f2f2;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
-    font-size: 17px;
-}
-
-/* Keep the hamburger on the far left */
-.topnav a.icon {
-    position: absolute;
-    left: 16px;
-}
-
-.topnav a:hover {
-    background-color: #ddd;
-    color: black;
-}
-
-.topnav a.active {
-    background-color: #04AA6D;
-    color: white;
-}
-
-
-/* End NAV bar */
-
-/* Side NAV bar */
-
-.sidenav {
-    height: 100%;
-    width: 0;
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    left: 0;
-    background-color: #111;
-    overflow-x: hidden;
-    transition: 0.5s;
-    padding-top: 60px;
-    font-size: 20px;
-    font-family: 'times new roman', serif;
-    
-}
-
-.sidenav a {
-    padding: 8px 8px 8px 32px;
-    text-decoration: none;
-    font-size: 25px;
-    color: #818181;
-    display: block;
-    transition: 0.3s;
-
-}
-
-.sideNavSpan {
-    position: inherit;
-
-}
-
-
-.sidenav a:hover {
-    color: forestgreen;
-}
-
-
-.sidenav .closebtn {
-    position: absolute;
-    top: 0;
-    right: 25px;
-    font-size: 36px;
-    margin-left: 50px;
-}
-
-@media screen and (max-height: 450px) {
-    .sidenav {
-        padding-top: 1px;
-    }
-
-    .sidenav a {
-        font-size: 18px;
-    }
-}
-
-
-/* Side NAV bar end */
-
-
-/* Main page side news bar */
-.flex_side {
-    position: absolute;        
-    top: 120px;                
-    right: 20px;               
-    width: 320px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    z-index: 2;
-}
-
-.flex_side > div {
-    background: rgba(0, 0, 0, 0.65);
-    color: white;
-    padding: 16px;
-    border-radius: 10px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.35);
-}
-
-.flex_side h2 {
-    margin: 0 0 8px 0;
-    font-size: 1.25rem;
-}
-
-.flex_side p {
-    margin: 0;
-    font-size: 0.95rem;
-    line-height: 1.4;
-}
-
-/* Main page side news bar end */
-
-/* =========================
-    Upload Page Styling
-========================= */
-
-
-
-/* Main area below nav */
-.upload_page {
-    min-height: calc(100vh - 48px); 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 50px 20px;
-
-    /* Background for the page content */
-    background-image: url("../images/Registration_Background.jpg");
-    background-size: cover;
-    background-position: center;
-    position: relative;
-}
-
-/* Optional: dark overlay for readability */
-.upload_page::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.45);
-    z-index: 0;
-}
-
-/* Frosted Glass Card */
-.upload_card {
-    position: relative;
-    z-index: 1;
-
-    width: 100%;
-    max-width: 460px;
-
-    padding: 38px;
-    border-radius: 16px;
-
-    background: rgba(20, 20, 20, 0.85);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
-    text-align: center;
-    color: #fff;
-}
-
-/* Title */
-.upload_card h1 {
-    margin: 0 0 18px 0;
-    font-size: 2rem;
-    letter-spacing: 0.5px;
-}
-
-/* Upload message styling */
-.upload_message {
-    margin: 0 0 18px 0;
-    font-weight: 600;
-    padding: 10px 12px;
-    border-radius: 10px;
-    font-size: 15px;
-}
-
-.upload_message.success {
-    color: #0bd07a;
-    background: rgba(11, 208, 122, 0.12);
-    border: 1px solid rgba(11, 208, 122, 0.25);
-}
-
-.upload_message.error {
-    color: #ff4d4d;
-    background: rgba(255, 77, 77, 0.12);
-    border: 1px solid rgba(255, 77, 77, 0.25);
-}
-
-/* Upload Drop Zone */
-.upload_box {
-    display: block;
-    border: 2px dashed rgba(255, 255, 255, 0.35);
-    padding: 28px 18px;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: all 0.25s ease;
-    margin: 0 0 20px 0;
-    user-select: none;
-}
-
-.upload_box:hover {
-    border-color: #04AA6D;
-    background: rgba(4, 170, 109, 0.12);
-    transform: translateY(-1px);
-}
-
-/* Hide actual file input */
-.upload_box input[type="file"] {
-    display: none;
-}
-
-/* Button */
-.upload_button {
-    width: 100%;
-    padding: 14px;
-    border-radius: 10px;
-    border: none;
-
-    background-color: #04AA6D;
-    color: white;
-
-    font-size: 16px;
-    font-weight: 600;
-
-    cursor: pointer;
-    transition: all 0.25s ease;
-}
-
-.upload_button:hover {
-    background-color: #038f5a;
-    transform: translateY(-2px);
-}
-
-.upload_button:active {
-    transform: translateY(0);
-}
-
-/* ===============================
-        Registration Page
-================================ */
-
-.background_image {
-    position: fixed;        
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-
-    background-image: url("../images/Registration_Background.jpg");
-    background-size: cover;
-    background-position: center;
-
-    z-index: -1;           
-}
-
-
 * {
     box-sizing: border-box;
 }
 
-/* Center page content */
-.centered_page {
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f6f8;
+    color: #222;
+}
+
+/* Top Navigation */
+.topnav {
+    background-color: #1f2937;
     display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+    .topnav a {
+        color: white;
+        padding: 14px 16px;
+        text-decoration: none;
+        font-size: 16px;
+    }
+
+        .topnav a.icon {
+            position: absolute;
+            left: 16px;
+        }
+
+        .topnav a:hover,
+        .topnav a.active {
+            background-color: #2563eb;
+            color: white;
+        }
+
+/* Side Navigation */
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    background-color: #111827;
+    overflow-x: hidden;
+    transition: 0.4s;
+    padding-top: 60px;
+}
+
+    .sidenav a {
+        padding: 10px 10px 10px 32px;
+        text-decoration: none;
+        font-size: 22px;
+        color: #d1d5db;
+        display: block;
+    }
+
+        .sidenav a:hover,
+        .sidenav a.active {
+            color: #60a5fa;
+        }
+
+    .sidenav .closebtn {
+        position: absolute;
+        top: 0;
+        right: 25px;
+        font-size: 36px;
+    }
+
+/* Home Page */
+.main_page {
+    min-height: 55vh;
+    background: linear-gradient(rgba(31,41,55,0.75), rgba(31,41,55,0.75)), url("../images/Registration_Background.jpg");
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
     padding: 40px 20px;
-}
-
-/* Wrapper controls width + title alignment */
-.form_wrapper {
-    width: 100%;
-    max-width: 460px;
-}
-
-/* Title styling */
-.form_wrapper h1 {
     text-align: center;
-    margin-bottom: 25px;
-    font-size: 2rem;
+    color: white;
 }
 
-/* Form card */
-.form_wrapper form {
-    background: rgba(30, 30, 30, 0.85);
-    padding: 32px;
-    border-radius: 14px;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35);
-    color: #ffffff;
+    .main_page h1 {
+        font-size: 2.8rem;
+        margin-bottom: 10px;
+    }
+
+    .main_page p {
+        font-size: 1.1rem;
+        max-width: 720px;
+    }
+
+/* Info Cards */
+.flex_side {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    padding: 30px 20px;
+    flex-wrap: wrap;
 }
 
-/* Field container spacing */
-.field {
-    margin-bottom: 18px;
-}
+    .flex_side > div {
+        background: white;
+        width: 320px;
+        padding: 22px;
+        border-radius: 12px;
+        box-shadow: 0 8px 22px rgba(0,0,0,0.12);
+    }
 
-/* Labels */
-.field label {
-    display: block;
-    margin-bottom: 6px;
-    font-size: 14px;
-    font-weight: 500;
-}
+    .flex_side h2 {
+        margin-top: 0;
+        color: #1f2937;
+    }
 
-/* Inputs */
-.field input {
-    width: 100%;
-    height: 44px;
-    padding: 10px 12px;
-    border-radius: 8px;
-    border: 1px solid rgba(255,255,255,0.15);
-    font-size: 15px;
-    background-color: #ffffff;
-    outline: none;
-    transition: all 0.2s ease;
-}
+    .flex_side p {
+        line-height: 1.5;
+    }
 
-/* Focus effect */
-.field input:focus {
-    border-color: #04AA6D;
-    box-shadow: 0 0 0 3px rgba(4,170,109,0.25);
-}
-
-/* Button */
-.form_wrapper button {
-    width: 100%;
-    padding: 14px;
-    margin-top: 10px;
-    border-radius: 8px;
-    border: none;
-    background-color: #04AA6D;
-    color: #ffffff;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.1s ease;
-}
-
-/* Button hover */
-.form_wrapper button:hover {
-    background-color: #038f5a;
-    transform: translateY(-1px);
-}
-
-
-.form_message {
-    text-align: center;
-    margin-bottom: 15px;
-}
-
-
-
-/* Login Page */
-
-/* =========================
-   Login Page
-========================= */
-
-.login_page {
-    min-height: 100vh;
+/* Shared Form/Profile Pages */
+.centered_page,
+.profile_page {
+    min-height: calc(100vh - 48px);
+    padding: 45px 20px;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 40px;
-
-    /* background image */
-    background-image: url("../images/Registration_Background.jpg");
+    background-image: url("../images/background.jpg");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    position: relative;
 }
 
-/* dark overlay so text/card pops */
-.login_page::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: rgba(0,0,0,0.45);
-}
-
-/* keep card above overlay */
-.login_wrapper {
-    position: relative;
-    width: min(520px, 92vw);
-    text-align: center;
-}
-
-/* Title */
-.login_wrapper h1 {
-    margin: 0 0 18px 0;
-    font-size: 2rem;
-    color: #111;
-}
-
-/* Card */
-.login_card {
-    background: rgba(20, 20, 20, 0.85);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-
-    border-radius: 16px;
-    padding: 34px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.6);
-    color: #fff;
-}
-
-.form_message {
-    margin: 0 0 18px 0;
-    font-weight: 600;
-    padding: 10px 12px;
-    border-radius: 10px;
-    font-size: 15px;
-    text-align: center;
-}
-
-.form_message.success {
-    color: #0bd07a;
-    background: rgba(11, 208, 122, 0.12);
-    border: 1px solid rgba(11, 208, 122, 0.25);
-}
-
-.form_message.error {
-    color: #ff4d4d;
-    background: rgba(255, 77, 77, 0.12);
-    border: 1px solid rgba(255, 77, 77, 0.25);
-}
-
-/* Form layout */
-.login_form {
-    display: grid;
-    gap: 14px;
-    text-align: left;
-}
-
-.login_form label {
-    display: block;
-    margin-bottom: 6px;
-    font-weight: 600;
-}
-
-.login_form input {
-    width: 100%;
-    height: 44px;
-    padding: 10px 12px;
-
-    border-radius: 10px;
-    border: 1px solid rgba(255,255,255,0.15);
-    background: rgba(255,255,255,0.95);
-
-    outline: none;
-    font-size: 16px;
-}
-
-.login_form input:focus {
-    border-color: #04AA6D;
-    box-shadow: 0 0 0 3px rgba(4,170,109,0.25);
-}
-
-/* Button */
-.login_button {
-    margin-top: 6px;
-    width: 100%;
-    height: 48px;
-
-    border: none;
-    border-radius: 10px;
-
-    background: #04AA6D;
-    color: #fff;
-    font-size: 16px;
-    font-weight: 700;
-
-    cursor: pointer;
-    transition: transform 0.15s ease, background 0.2s ease;
-}
-
-.login_button:hover {
-    background: #038f5a;
-    transform: translateY(-2px);
-}
-
-/* Small screens */
-@media (max-width: 420px) {
-    .login_card { padding: 24px; }
-    .login_wrapper h1 { font-size: 1.6rem; }
-}
-
-
-
-
-/* =========================
-   Profile Page Styling
-========================= */
-
-
-.profile_page {
-    min-height: 100vh;
-    padding: 40px;
-    background-image: url("../images/Registration_Background.jpg");
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-
-.centered_page {
-    min-height: 100vh;
-    padding: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* Wrapper */
 .form_wrapper {
-    width: 520px;
-    text-align: center;
+    width: 100%;
+    max-width: 520px;
+    background: white;
+    padding: 30px;
+    border-radius: 14px;
+    box-shadow: 0 10px 28px rgba(0,0,0,0.15);
 }
 
-    /* Title */
     .form_wrapper h1 {
-        margin: 0 0 18px 0;
+        text-align: center;
+        margin-top: 0;
+        color: #1f2937;
+    }
+
+    .form_wrapper p {
+        text-align: center;
+    }
+
+/* Forms */
+.field {
+    margin-bottom: 16px;
+}
+
+    .field label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: 600;
+    }
+
+    .field input,
+    .field select {
+        width: 100%;
+        height: 44px;
+        padding: 10px;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        font-size: 15px;
+    }
+
+        .field input:focus,
+        .field select:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.18);
+        }
+
+button,
+.button_primary,
+.button_secondary {
+    display: inline-block;
+    width: 100%;
+    padding: 13px;
+    border: none;
+    border-radius: 8px;
+    text-align: center;
+    text-decoration: none;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button,
+.button_primary {
+    background: #2563eb;
+    color: white;
+}
+
+    button:hover,
+    .button_primary:hover {
+        background: #1d4ed8;
+    }
+
+.button_secondary {
+    background: #374151;
+    color: white;
+}
+
+    .button_secondary:hover {
+        background: #111827;
+    }
+
+/* Messages */
+.form_message {
+    text-align: center;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    font-weight: 600;
+}
+
+    .form_message.success {
+        color: #166534;
+        background: #dcfce7;
+        border: 1px solid #86efac;
+    }
+
+    .form_message.error {
+        color: #991b1b;
+        background: #fee2e2;
+        border: 1px solid #fca5a5;
+    }
+
+/* Profile */
+.profile_info {
+    margin-top: 20px;
+    padding: 18px;
+    background: #f8fafc;
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
+}
+
+    .profile_info p {
+        text-align: left;
+        margin: 10px 0;
+    }
+
+.profile_actions {
+    margin-top: 18px;
+}
+
+/* Mobile */
+@media (max-width: 700px) {
+    .topnav {
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        padding-left: 50px;
+    }
+
+    .main_page h1 {
         font-size: 2rem;
     }
 
-/* Profile “card” area */
-.profile_info {
-    background: rgba(20, 20, 20, 0.85);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    padding: 28px;
-    border-radius: 14px;
-    box-shadow: 0 12px 30px rgba(0,0,0,0.45);
-    color: #fff;
-    text-align: left;
+    .flex_side {
+        flex-direction: column;
+        align-items: center;
+    }
 }
+/* Login */
 
-/* Each row */
-.profile_row {
-    display: grid;
-    grid-template-columns: 140px 1fr;
-    gap: 12px;
+.login_background {
+
+    min-height: 55vh;
+    background: url("../images/background.jpg");
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    padding: 10px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.08);
-}
-
-    .profile_row:last-child {
-        border-bottom: none;
-    }
-
-    /* Label */
-    .profile_row span {
-        font-weight: 700;
-        color: rgba(255,255,255,0.9);
-    }
-
-    /* Value text */
-    .profile_row p {
-        margin: 0;
-        color: rgba(255,255,255,0.85);
-        word-break: break-word;
-    }
-
-/* Actions area (logout button) */
-.profile_actions {
-    margin-top: 16px;
-}
-
-/* Button-like link */
-.button_primary {
-    display: inline-block;
-    width: 100%;
+    padding: 40px 20px;
     text-align: center;
-    padding: 14px;
-    border-radius: 10px;
-    background: #04AA6D;
-    color: #fff;
-    text-decoration: none;
-    font-weight: 700;
-    transition: 0.2s ease;
+    color: white;
 }
-
-    .button_primary:hover {
-        background: #038f5a;
-        transform: translateY(-1px);
-    }

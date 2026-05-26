@@ -1,117 +1,120 @@
 <?php
+session_start();
 require_once __DIR__ . "/includes/Database.php";
 
 $message = "";
+$messageType = "";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    // Collect form values safely
-    $email     = trim($_POST["email"] ?? "");
-    $password  = $_POST["password"] ?? "";
     $firstName = trim($_POST["firstName"] ?? "");
     $lastName  = trim($_POST["lastName"] ?? "");
-    $address   = trim($_POST["address"] ?? "");
+    $email     = trim($_POST["email"] ?? "");
     $phone     = trim($_POST["phone"] ?? "");
-    $salary    = trim($_POST["salary"] ?? "");
-    $ssn       = trim($_POST["ssn"] ?? "");
+    $username  = trim($_POST["username"] ?? "");
+    $password  = $_POST["password"] ?? "";
 
-    // Basic validation (minimum required fields)
-    if ($email === "" || $password === "" || $firstName === "" || $lastName === "") {
-        $message = "Please fill out Email, Password, First Name, and Last Name.";
+    if ($firstName === "" || $lastName === "" || $email === "" || $username === "" || $password === "") {
+        $message = "Please complete all required fields.";
+        $messageType = "error";
     } else {
-        // Hash password for storage
         $passwordHash = password_hash($password, PASSWORD_DEFAULT);
 
-        // Create DB connection
-        $db  = new Database();
+        $db = new Database();
         $con = $db->createConnection();
 
-       
-        // Escape strings to reduce SQL issues
-        $emailEsc     = $con->real_escape_string($email);
-        $passEsc      = $con->real_escape_string($passwordHash);
-        $firstEsc     = $con->real_escape_string($firstName);
-        $lastEsc      = $con->real_escape_string($lastName);
-        $addressEsc   = $con->real_escape_string($address);
-        $phoneEsc     = $con->real_escape_string($phone);
-        $salaryValue  = ($salary === "") ? "NULL" : (float)$salary; // decimal
-        $ssnEsc       = $con->real_escape_string($ssn);
+        $sql = "INSERT INTO students (firstName, lastName, email, phone, username, password)
+                VALUES (?, ?, ?, ?, ?, ?)";
 
-        $sql = "INSERT INTO tblUser (email, password, firstName, lastName, address, phone, salary, SSN)
-                VALUES ('$emailEsc', '$passEsc', '$firstEsc', '$lastEsc', '$addressEsc', '$phoneEsc', $salaryValue, '$ssnEsc')";
+        $stmt = $con->prepare($sql);
 
-        $db->executeQuery($con, $sql);
+        if (!$stmt) {
+            $message = "Database error preparing registration.";
+            $messageType = "error";
+        } else {
+            $stmt->bind_param("ssssss", $firstName, $lastName, $email, $phone, $username, $passwordHash);
 
-        $message = "Registration successful! (User added to database.)";
+            if ($stmt->execute()) {
+                $message = "Registration successful! You can now log in.";
+                $messageType = "success";
+            } else {
+                $message = "Registration failed. Email or username may already exist.";
+                $messageType = "error";
+            }
+
+            $stmt->close();
+        }
 
         $con->close();
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Registration</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Registration</title>
     <link rel="stylesheet" href="css/style.css">
+    <script src="script.js" defer></script>
 </head>
+
 <body>
 
-    <!-- Top Navigation Bar -->
 <div class="topnav">
     <a href="javascript:void(0);" class="icon" onclick="openNav()">&#9776;</a>
-    <a class="active" href="index.php">Home</a>
+    <a href="index.php">Home</a>
+    <a href="login.php">Login</a>
+    <a class="active" href="registration.php">Register</a>
+    <a href="enrollment.php">Enrollment</a>
 
-    <?php if (!isset($_SESSION["user_id"])): ?>
-        <a href="login.php">Login</a>
-        <a href="registration.php">Register</a>
-    <?php else: ?>
+    <?php if (isset($_SESSION["user_id"])): ?>
         <a href="profile.php">Profile</a>
         <a href="logout.php">Logout</a>
     <?php endif; ?>
 
-    <a href="upload.php">Upload</a>
     <a href="#contact">Contact</a>
 </div>
 
-<div class="background_image"></div>
+<div id="mySidenav" class="sidenav">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="index.php">Home</a>
+    <a href="login.php">Login</a>
+    <a class="active" href="registration.php">Register</a>
+    <a href="enrollment.php">Enrollment</a>
+
+    <?php if (isset($_SESSION["user_id"])): ?>
+        <a href="profile.php">Profile</a>
+        <a href="logout.php">Logout</a>
+    <?php endif; ?>
+</div>
 
 <main class="centered_page">
-    
     <div class="form_wrapper">
-        <h1>Registration</h1>
+        <h1>Student Registration</h1>
+        <p>Create a student account to access course enrollment features.</p>
 
         <?php if ($message !== ""): ?>
-            <p class="form_message">
+            <p class="form_message <?php echo htmlspecialchars($messageType); ?>">
                 <strong><?php echo htmlspecialchars($message); ?></strong>
             </p>
         <?php endif; ?>
 
-        <form method="POST" action="registration.php">
+        <form method="POST" action="registration.php" autocomplete="off">
 
             <div class="field">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-
-            <div class="field">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-
-            <div class="field">
-                <label for="firstName">First Name</label>
+                <label for="firstName">First Name *</label>
                 <input type="text" id="firstName" name="firstName" required>
             </div>
 
             <div class="field">
-                <label for="lastName">Last Name</label>
+                <label for="lastName">Last Name *</label>
                 <input type="text" id="lastName" name="lastName" required>
             </div>
 
             <div class="field">
-                <label for="address">Address</label>
-                <input type="text" id="address" name="address">
+                <label for="email">Email *</label>
+                <input type="email" id="email" name="email" required>
             </div>
 
             <div class="field">
@@ -120,22 +123,20 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             </div>
 
             <div class="field">
-                <label for="salary">Salary</label>
-                <input type="number" step="0.01" id="salary" name="salary">
+                <label for="username">Username *</label>
+                <input type="text" id="username" name="username" required>
             </div>
 
             <div class="field">
-                <label for="ssn">SSN</label>
-                <input type="text" id="ssn" name="ssn" placeholder="123-45-6789">
+                <label for="password">Password *</label>
+                <input type="password" id="password" name="password" required>
             </div>
 
             <button type="submit">Register</button>
 
         </form>
     </div>
-
 </main>
-
 
 </body>
 </html>
