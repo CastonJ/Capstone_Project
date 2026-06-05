@@ -23,11 +23,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $message = "Please select a course.";
         $messageType = "error";
     } else {
+
+        // Get selected course information
         $checkCourse = $con->prepare(
             "SELECT courseID, courseCode, courseName, maxEnrollment, currentEnrollment 
              FROM courses 
              WHERE courseID = ?"
         );
+
         $checkCourse->bind_param("i", $courseID);
         $checkCourse->execute();
         $course = $checkCourse->get_result()->fetch_assoc();
@@ -37,11 +40,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $message = "The selected course could not be found.";
             $messageType = "error";
         } else {
+
+            // Check if student is already enrolled
             $checkExisting = $con->prepare(
                 "SELECT enrollmentID 
                  FROM enrollments 
                  WHERE studentID = ? AND courseID = ?"
             );
+
             $checkExisting->bind_param("ii", $studentID, $courseID);
             $checkExisting->execute();
             $existing = $checkExisting->get_result();
@@ -50,24 +56,34 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             if ($existing->num_rows > 0) {
                 $message = "You are already enrolled in this course.";
                 $messageType = "error";
+
             } elseif ($course["currentEnrollment"] < $course["maxEnrollment"]) {
+
+                // Enroll student if course has available seats
                 $insertEnroll = $con->prepare(
                     "INSERT INTO enrollments (studentID, courseID, status) 
                      VALUES (?, ?, 'Enrolled')"
                 );
+
                 $insertEnroll->bind_param("ii", $studentID, $courseID);
 
                 if ($insertEnroll->execute()) {
+
+                    // Increase current enrollment count
                     $updateCourse = $con->prepare(
                         "UPDATE courses 
                          SET currentEnrollment = currentEnrollment + 1 
                          WHERE courseID = ?"
                     );
+
                     $updateCourse->bind_param("i", $courseID);
                     $updateCourse->execute();
                     $updateCourse->close();
 
-                    $message = "You have successfully enrolled in " . htmlspecialchars($course["courseCode"]) . " - " . htmlspecialchars($course["courseName"]) . ".";
+                    $message = "You have successfully enrolled in " .
+                        htmlspecialchars($course["courseCode"]) . " - " .
+                        htmlspecialchars($course["courseName"]) . ".";
+
                     $messageType = "success";
                 } else {
                     $message = "Enrollment could not be completed.";
@@ -75,32 +91,57 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 }
 
                 $insertEnroll->close();
+
             } else {
-                $positionQuery = $con->prepare(
-                    "SELECT COUNT(*) + 1 AS waitlistPosition 
+
+                // Course is full. Check if student is already on waitlist.
+                $checkWaitlist = $con->prepare(
+                    "SELECT waitlistID 
                      FROM waitlist 
-                     WHERE courseID = ?"
+                     WHERE studentID = ? AND courseID = ?"
                 );
-                $positionQuery->bind_param("i", $courseID);
-                $positionQuery->execute();
-                $position = $positionQuery->get_result()->fetch_assoc()["waitlistPosition"];
-                $positionQuery->close();
 
-                $insertWaitlist = $con->prepare(
-                    "INSERT INTO waitlist (studentID, courseID, waitlistPosition) 
-                     VALUES (?, ?, ?)"
-                );
-                $insertWaitlist->bind_param("iii", $studentID, $courseID, $position);
+                $checkWaitlist->bind_param("ii", $studentID, $courseID);
+                $checkWaitlist->execute();
+                $waitlistResult = $checkWaitlist->get_result();
+                $checkWaitlist->close();
 
-                if ($insertWaitlist->execute()) {
-                    $message = "This course is full. You have been added to the waitlist.";
-                    $messageType = "success";
-                } else {
-                    $message = "Could not add you to the waitlist.";
+                if ($waitlistResult->num_rows > 0) {
+                    $message = "You are already on the waitlist for this course.";
                     $messageType = "error";
-                }
+                } else {
 
-                $insertWaitlist->close();
+                    // Determine waitlist position
+                    $positionQuery = $con->prepare(
+                        "SELECT COUNT(*) + 1 AS waitlistPosition 
+                         FROM waitlist 
+                         WHERE courseID = ?"
+                    );
+
+                    $positionQuery->bind_param("i", $courseID);
+                    $positionQuery->execute();
+                    $positionResult = $positionQuery->get_result()->fetch_assoc();
+                    $position = $positionResult["waitlistPosition"];
+                    $positionQuery->close();
+
+                    // Add student to waitlist
+                    $insertWaitlist = $con->prepare(
+                        "INSERT INTO waitlist (studentID, courseID, waitlistPosition) 
+                         VALUES (?, ?, ?)"
+                    );
+
+                    $insertWaitlist->bind_param("iii", $studentID, $courseID, $position);
+
+                    if ($insertWaitlist->execute()) {
+                        $message = "This course is full. You have been added to the waitlist.";
+                        $messageType = "success";
+                    } else {
+                        $message = "Could not add you to the waitlist.";
+                        $messageType = "error";
+                    }
+
+                    $insertWaitlist->close();
+                }
             }
         }
     }
@@ -133,7 +174,7 @@ $courses = $con->query(
     <a class="active" href="enrollment.php">Enrollment</a>
     <a href="profile.php">Profile</a>
     <a href="logout.php">Logout</a>
-    <a href="#contact">Contact</a>
+    <a href="contact.php">Contact</a>
 </div>
 
 <div id="mySidenav" class="sidenav">

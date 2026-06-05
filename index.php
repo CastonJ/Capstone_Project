@@ -26,7 +26,7 @@ session_start();
         <a href="logout.php">Logout</a>
     <?php endif; ?>
 
-    <a href="#contact">Contact</a>
+    <a href="contact.php">Contact</a>
 </div>
 
 <div id="mySidenav" class="sidenav">
@@ -42,7 +42,7 @@ session_start();
         <a href="logout.php">Logout</a>
     <?php endif; ?>
 
-    <a href="#contact">Contact</a>
+    <a href="contact.php">Contact</a>
 </div>
 
 <div class="main_page">

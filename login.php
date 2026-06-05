@@ -84,7 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <a href="logout.php">Logout</a>
     <?php endif; ?>
 
-    <a href="#contact">Contact</a>
+    <a href="contact.php">Contact</a>
 </div>
 
 <div id="mySidenav" class="sidenav">
